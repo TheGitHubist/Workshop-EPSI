@@ -1,7 +1,5 @@
-#include <stdio.h>
+#include <Arduino.h>
 #include <string>
-#include <iostream>
-#include <ctime>
 
 enum LogicDoor {
   XOR,
@@ -13,7 +11,6 @@ enum LogicDoor {
 std::string generateID() {
   std::string id = "";
   srand((unsigned)time(NULL));
-  int random;
   for (int i = 0; i < 2; i++) {
     LogicDoor door = LogicDoor(rand()%4);
     switch (door) {
