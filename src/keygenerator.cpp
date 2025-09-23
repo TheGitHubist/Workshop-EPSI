@@ -16,7 +16,7 @@ std::string generateID() {
       default : id += "00"; break;
     }
   }
-  return id;
+  return id.substr(0, 2) != id.substr(2, 4) ? id : generateID();
 }
 
 std::string generateBlur() {
