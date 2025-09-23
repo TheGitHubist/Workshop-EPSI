@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include "ciphertext.h"
+#include "keygenerator.h"
 
 // Device-specific connection credentials based on MAC address
 String generateDeviceSSID() {

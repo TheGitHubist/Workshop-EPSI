@@ -1,12 +1,7 @@
-#include <Arduino.h>
 #include <string>
-
-enum LogicDoor {
-  XOR,
-  NOR,
-  NAND,
-  AND
-};
+#include <cstdlib>
+#include <ctime>
+#include "keygenerator.h"
 
 std::string generateID() {
   std::string id = "";
@@ -14,10 +9,10 @@ std::string generateID() {
   for (int i = 0; i < 2; i++) {
     LogicDoor door = LogicDoor(rand()%4);
     switch (door) {
-      case XOR : id += "00"; break;
-      case NOR : id += "01"; break;
-      case NAND : id += "10"; break;
-      case AND : id += "11"; break;
+      case KXOR : id += "00"; break;
+      case KNXOR : id += "01"; break;
+      case NKXOR : id += "10"; break;
+      case NKNXOR : id += "11"; break;
       default : id += "00"; break;
     }
   }
