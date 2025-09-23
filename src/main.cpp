@@ -4,25 +4,8 @@
 #include "ciphertext.h"
 #include "keygenerator.h"
 
-// Device-specific connection credentials based on MAC address
-String generateDeviceSSID() {
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  char ssid[13];
-  sprintf(ssid, "ESP_%02X%02X%02X", mac[3], mac[4], mac[5]);
-  return String(ssid);
-}
-
-String generateDevicePassword() {
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  char password[17];
-  sprintf(password, "PW_%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-  return String(password);
-}
-
-const char* ap_ssid = generateDeviceSSID().c_str();
-const char* ap_password = generateDevicePassword().c_str();
+const char* ssid = "Never gonna give you up"; // Replace with your WiFi SSID
+const char* password = "n€verG0nnAl€tyoUd0wn"; // Replace with your WiFi Password
 
 // MQTT broker details
 const char* mqttServer = "broker.emqx.io";
@@ -36,20 +19,6 @@ const char* subscribeTopic = "/DIP/#";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-
-void setupAccessPoint() {
-    Serial.print("Setting up Access Point...");
-    WiFi.mode(WIFI_AP);
-    WiFi.softAP(ap_ssid, ap_password);
-
-    Serial.println("\nAccess Point created");
-    Serial.print("SSID: ");
-    Serial.println(ap_ssid);
-    Serial.print("Password: ");
-    Serial.println(ap_password);
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.softAPIP());
-}
 
 // Function to connect to MQTT broker
 void connectToMQTT() {
@@ -81,9 +50,23 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
+void setupWiFi() {
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
 void setup() {
   Serial.begin(115200);
-  setupAccessPoint();
+  setupWiFi();
+  client.setCallback(mqttCallback);
 }
 
 void loop() {

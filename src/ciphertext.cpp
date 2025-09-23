@@ -7,7 +7,7 @@ std::string kxortext(const std::string &plaintext, const std::string &key) {
     size_t key_len = key.length();
 
     if (key_len == 0) {
-        throw std::invalid_argument("Key cannot be empty");
+        return "";
     }
 
     // KXOR (regular XOR) encryption working with bytes to support UTF-8
@@ -22,7 +22,7 @@ std::string knxortext(const std::string &plaintext, const std::string &key) {
     size_t key_len = key.length();
 
     if (key_len == 0) {
-        throw std::invalid_argument("Key cannot be empty");
+        return "";
     }
 
     // KNXOR (regular NXOR) encryption working with bytes to support UTF-8
@@ -37,7 +37,7 @@ std::string nkxortext(const std::string &plaintext, const std::string &key) {
     size_t key_len = key.length();
 
     if (key_len == 0) {
-        throw std::invalid_argument("Key cannot be empty");
+        return "";
     }
 
     // NKXOR (XOR but with NOT key) encryption working with bytes to support UTF-8
@@ -52,7 +52,7 @@ std::string nknxortext(const std::string &plaintext, const std::string &key) {
     size_t key_len = key.length();
 
     if (key_len == 0) {
-        throw std::invalid_argument("Key cannot be empty");
+        return "";
     }
 
     // NKNXOR (NXOR but with NOT key) encryption working with bytes to support UTF-8
@@ -67,7 +67,7 @@ LogicDoor getLogicDoor(const std::string &id) {
     if (id == "01") return KNXOR;
     if (id == "10") return NKXOR;
     if (id == "11") return NKNXOR;
-    throw std::invalid_argument("Invalid ID");
+    return KXOR; // Default case (should not happen with valid input)
 }
 
 std::string encryptMessage(const std::string &message, const std::string &key) {
@@ -94,7 +94,7 @@ std::string encryptMessage(const std::string &message, const std::string &key) {
             ciphertext = nknxortext(message, keyCopy);
             break;
         default:
-            throw std::invalid_argument("Invalid Logic Door");
+            break;
     }
     switch (doorTwo) {
         case KXOR:
@@ -110,7 +110,7 @@ std::string encryptMessage(const std::string &message, const std::string &key) {
             ciphertext = nknxortext(ciphertext, keyCopy);
             break;
         default:
-            throw std::invalid_argument("Invalid Logic Door");
+            break;
     }
 
     return ciphertext;
@@ -141,7 +141,7 @@ std::string decryptMessage(const std::string &ciphertext, const std::string &key
             plaintext = nknxortext(ciphertext, keyCopy);
             break;
         default:
-            throw std::invalid_argument("Invalid Logic Door");
+            break;
     }
     switch (doorOne) {
         case KXOR:
@@ -157,7 +157,7 @@ std::string decryptMessage(const std::string &ciphertext, const std::string &key
             plaintext = nknxortext(plaintext, keyCopy);
             break;
         default:
-            throw std::invalid_argument("Invalid Logic Door");
+            break;
     }
     return plaintext;
 }
