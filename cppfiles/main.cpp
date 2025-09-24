@@ -1,4 +1,5 @@
 #include "rsa.h"
+#include "encryption.h"
 
 bool isPrime(int number) {
     if (number <= 1) return false;
